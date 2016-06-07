@@ -2,11 +2,12 @@ app.service('anchorSmoothScroll', function(){
 
     this.scrollTo = function(eID) {
 
-        // This scrolling function
-        // is from http://www.itnewb.com/tutorial/Creating-the-Smooth-Scroll-Effect-with-JavaScript
+        console.log('call scrollTo')
 
         var startY = currentYPosition();
         var stopY = elmYPosition(eID);
+        console.log(stopY)
+        console.log(startY)
         var distance = stopY > startY ? stopY - startY : startY - stopY;
         if (distance < 100) {
             scrollTo(0, stopY); return;

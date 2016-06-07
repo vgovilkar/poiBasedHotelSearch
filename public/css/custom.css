@@ -5,6 +5,7 @@
   padding: 5px;
 }
 .outerbox {
+  height: 550px;
   padding: 10px;
 }
 
@@ -29,9 +30,12 @@
 {
     opacity:0.5;
 	  color:#996;
-
 }
 
+.uline
+{
+  text-decoration: underline;
+}
 .full {
   background: url(../images/traveler-full-edited.jpg) no-repeat fixed;
   -webkit-background-size: cover;

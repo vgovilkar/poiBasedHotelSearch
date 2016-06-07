@@ -3,45 +3,73 @@ var app = angular.module('example', ['google.places']);
 // Setup a basic controller with a scope variable 'place'
 app.controller('MainCtrl', function ($filter, $http, $scope, $location, anchorSmoothScroll) {
   $scope.city = null;
-  $scope.search = 'GO!';
+  $scope.poisearch = 'GO!';
+  $scope.hotelsearch = 'Find Hotels!';
   $scope.checkin = {value: new Date()};
   $scope.checkout = {value: new Date()};
-
+  $scope.selectedPoiLatLong = {};
   $scope.poiresults = null;
+  $scope.hotelresults = null;
+
 
   $scope.autocompleteOptions = {
     types: ['(cities)']
   }
 
-  $scope.clickimg = function(event) {
+  $scope.clickimg = function(event,activity) {
     var clickedobj = event.target;
     $(clickedobj).toggleClass("check");
     $(clickedobj).parent().find('span').toggleClass('glyphicon-ok');
+    $(clickedobj).parent().parent().find('p').toggleClass('uline');
+    if($scope.selectedPoiLatLong.hasOwnProperty(activity['id'])) {
+      delete $scope.selectedPoiLatLong[activity['id']];
+    } else {
+      $scope.selectedPoiLatLong[activity['id']] = activity['latLng'];
+    }
   }
 
-  $scope.searchnow = function() {
-    $scope.search = 'Finding Activites...'
+  $scope.getHotels = function() {
+    $scope.hotelsearch = 'Finding Hotels';
+    $scope.hotelresults = null;
+    var city = $scope.city;
+    var checkin = $scope.checkin;
+    var checkout = $scope.checkout;
+    var queryurl = '/hotelSearch/' + city.formatted_address;
+
+    $http({
+      method: 'GET',
+      url: queryurl
+    }).then(function successCallback(response) {
+        $scope.hotelresults = response.data
+        $scope.hotelsearch = 'Refresh Hotels!';
+        anchorSmoothScroll.scrollTo('hotels');
+      }, function errorCallback(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+      });
+  }
+
+  $scope.getActivites = function() {
+    $scope.poiresults = null;
+    $scope.hotelresults = null;
+    $scope.poisearch = 'Finding Activites...'
     var city = $scope.city
     var checkin = $scope.checkin
     var checkout = $scope.checkout
-
     if(city == null || checkin == null || checkout==null) {
       return;
     }
     cityLatLong = city.geometry.location.lat() + ',' + city.geometry.location.lng();
     ddate = $filter('date')(checkin.value, "yyyy-MM-dd");
 
-    var queryurl = '/actsearch?cityLatLong=' + cityLatLong ;
-
-    console.log(queryurl)
-
+    var queryurl = '/actsearch/' + city.formatted_address;
     $http({
       method: 'GET',
       url: queryurl
     }).then(function successCallback(response) {
         $scope.poiresults = response.data
-        $scope.search = 'GO!';
-        anchorSmoothScroll.scrollTo('bottom');
+        $scope.poisearch = 'Refresh Activites!';
+        anchorSmoothScroll.scrollTo('activites');
       }, function errorCallback(response) {
         // called asynchronously if an error occurs
         // or server returns response with an error status.

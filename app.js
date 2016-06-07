@@ -11,79 +11,30 @@ app.get('/hello', function(req, res) {
     res.send('Hello World!');
 });
 
-app.get('/actsearch', function(req, res) {
+app.get('/actsearch/:name', function(req, res) {
     var responseBody = [];
-    res.send([{
-        id: "170477",
-        title: "Willis Tower Skydeck & The Ledge",
-        imageUrl: "//a.travel-assets.com/lxweb/media-vault/170477_m.jpeg?v=101755",
-        largeImageURL: "//a.travel-assets.com/lxweb/media-vault/170477_l.jpeg?v=101755",
-        fromPrice: "$18",
-        fromPriceLabel: "per adult",
-        fromOriginalPrice: "",
-        fromOriginalPriceValue: "",
-        duration: "3h",
-        fromPriceTicketType: "adult",
-        freeCancellation: "true",
-        discountPercentage: null,
-        categories: [
-            "Attractions"
-        ],
-        latLng: "41.8788764,-87.6359149",
-        redemptionType: "Print",
-        supplierName: "Willis Tower",
-        recommendationScore: "85",
-        discountType: null,
-        shortDescription: null
-    }, {
-        id: "170477",
-        title: "Willis Tower Skydeck & The Ledge",
-        imageUrl: "//a.travel-assets.com/lxweb/media-vault/170477_m.jpeg?v=101755",
-        largeImageURL: "//a.travel-assets.com/lxweb/media-vault/170477_l.jpeg?v=101755",
-        fromPrice: "$18",
-        fromPriceLabel: "per adult",
-        fromOriginalPrice: "",
-        fromOriginalPriceValue: "",
-        duration: "3h",
-        fromPriceTicketType: "adult",
-        freeCancellation: "true",
-        discountPercentage: null,
-        categories: [
-            "Attractions"
-        ],
-        latLng: "41.8788764,-87.6359149",
-        redemptionType: "Print",
-        supplierName: "Willis Tower",
-        recommendationScore: "85",
-        discountType: null,
-        shortDescription: null
-    }, {
-        id: "170477",
-        title: "Willis Tower Skydeck & The Ledge",
-        imageUrl: "//a.travel-assets.com/lxweb/media-vault/170477_m.jpeg?v=101755",
-        largeImageURL: "//a.travel-assets.com/lxweb/media-vault/170477_l.jpeg?v=101755",
-        fromPrice: "$18",
-        fromPriceLabel: "per adult",
-        fromOriginalPrice: "",
-        fromOriginalPriceValue: "",
-        duration: "3h",
-        fromPriceTicketType: "adult",
-        freeCancellation: "true",
-        discountPercentage: null,
-        categories: [
-            "Attractions"
-        ],
-        latLng: "41.8788764,-87.6359149",
-        redemptionType: "Print",
-        supplierName: "Willis Tower",
-        recommendationScore: "85",
-        discountType: null,
-        shortDescription: null
-    }]);
+    console.log(req.params.name);
+    request({
+      url: 'http://localhost:8080/absearch/' + req.params.name,
+      method: 'GET'
+  },function(error, response, body){
+          res.send(body);
+  });
+});
+
+app.get('/hotelSearch/:name', function(req, res) {
+    var responseBody = [];
+    console.log(req.params.name);
+    request({
+      url: 'http://localhost:8080/absearch/gethotels/Chicago,%20IL,%20USA?activitieslatlongList=41.8781136,-87.6297982%7C41.8988153,-87.6229786%7C41.8817767,-87.6371461&checkInDate=2016-12-01&checkOutDate=2016-12-03',
+      method: 'GET'
+  },function(error, response, body){
+          res.send(body);
+  });
 });
 
 
-var server = app.listen(8080, function() {
+var server = app.listen(3000, function() {
     var host = server.address().address;
     var port = server.address().port;
 
