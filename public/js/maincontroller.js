@@ -29,11 +29,15 @@ app.controller('MainCtrl', function ($filter, $http, $scope, $location, anchorSm
   }
 
   $scope.getHotels = function() {
+    var city = $scope.city
+    var checkin = $scope.checkin
+    var checkout = $scope.checkout
+    if(city == null || checkin == null || checkout==null) {
+      return;
+    }
     $scope.hotelsearch = 'Finding Hotels';
     $scope.hotelresults = null;
-    var city = $scope.city;
-    var checkin = $scope.checkin;
-    var checkout = $scope.checkout;
+
     var queryurl = '/hotelSearch/' + city.formatted_address;
 
     $http({
@@ -42,7 +46,6 @@ app.controller('MainCtrl', function ($filter, $http, $scope, $location, anchorSm
     }).then(function successCallback(response) {
         $scope.hotelresults = response.data
         $scope.hotelsearch = 'Refresh Hotels!';
-        anchorSmoothScroll.scrollTo('hotels');
       }, function errorCallback(response) {
         // called asynchronously if an error occurs
         // or server returns response with an error status.
@@ -50,15 +53,15 @@ app.controller('MainCtrl', function ($filter, $http, $scope, $location, anchorSm
   }
 
   $scope.getActivites = function() {
-    $scope.poiresults = null;
-    $scope.hotelresults = null;
-    $scope.poisearch = 'Finding Activites...'
     var city = $scope.city
     var checkin = $scope.checkin
     var checkout = $scope.checkout
     if(city == null || checkin == null || checkout==null) {
       return;
     }
+    $scope.poiresults = null;
+    $scope.hotelresults = null;
+    $scope.poisearch = 'Finding Activites...'
     cityLatLong = city.geometry.location.lat() + ',' + city.geometry.location.lng();
     ddate = $filter('date')(checkin.value, "yyyy-MM-dd");
 
@@ -69,7 +72,6 @@ app.controller('MainCtrl', function ($filter, $http, $scope, $location, anchorSm
     }).then(function successCallback(response) {
         $scope.poiresults = response.data
         $scope.poisearch = 'Refresh Activites!';
-        anchorSmoothScroll.scrollTo('activites');
       }, function errorCallback(response) {
         // called asynchronously if an error occurs
         // or server returns response with an error status.
