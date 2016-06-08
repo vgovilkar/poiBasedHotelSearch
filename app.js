@@ -13,7 +13,7 @@ app.get('/hello', function(req, res) {
 
 app.get('/actsearch/:name', function(req, res) {
     var responseBody = [];
-    console.log(req.params.name);
+//    console.log(req.params.name);
     request({
       url: 'http://localhost:8080/absearch/' + req.params.name,
       method: 'GET'
@@ -22,11 +22,17 @@ app.get('/actsearch/:name', function(req, res) {
   });
 });
 
-app.get('/hotelSearch/:name', function(req, res) {
-    var responseBody = [];
-    console.log(req.params.name);
+app.get('/hotelSearch/*', function(req, res) {
+    console.log(req.query.city);
+    console.log(req.query.latlonglist);
+    console.log(req.query.checkin);
+    console.log(req.query.checkout);
+    var requrl = 'http://localhost:8080/absearch/gethotels/'+req.query.city+
+    '?activitieslatlongList=' + req.query.latlonglist + '&checkInDate=' +req.query.checkin +
+    '&checkOutDate=' + req.query.checkout;
+    console.log(requrl);
     request({
-      url: 'http://localhost:8080/absearch/gethotels/Chicago,%20IL,%20USA?activitieslatlongList=41.8781136,-87.6297982%7C41.8988153,-87.6229786%7C41.8817767,-87.6371461&checkInDate=2016-12-01&checkOutDate=2016-12-03',
+      url: requrl,
       method: 'GET'
   },function(error, response, body){
           res.send(body);
